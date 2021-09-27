@@ -62,6 +62,12 @@ var server = http.createServer(async function (request, response) {
       inMemoryImagesData = [...inMemoryImagesData, data];
       response.end("Data stored in memory");
       break;
+
+    // Delete images
+    case request.url == "/images" && request.method == "DELETE":
+      inMemoryImagesData = [];
+      response.end("All images deleted from memory");
+      break;
   }
 
   console.log(
