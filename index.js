@@ -18,6 +18,11 @@ const LOCALHOST = "127.0.0.1";
 let inMemoryImagesData = [];
 
 var server = http.createServer(async function (request, response) {
+  // log r
+  console.log(
+    `\nRequest URL → ${request.url}\nRequest Method → ${request.method}`
+  );
+
   // handle different request urls using switch
   switch (true) {
     case request.url == "/" && request.method == "GET":
