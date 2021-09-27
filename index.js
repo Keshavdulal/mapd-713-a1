@@ -15,10 +15,14 @@ const http = require("http");
 const PORT_ADDR = 8000;
 const LOCALHOST = "127.0.0.1";
 
+// Counters for GET & POST requests
+let getRequestCounter = 0;
+let postRequestCounter = 0;
+
 let inMemoryImagesData = [];
 
 var server = http.createServer(async function (request, response) {
-  // log r
+  // log requests endpoints and methods used
   console.log(
     `\nRequest URL → ${request.url}\nRequest Method → ${request.method}`
   );
@@ -26,11 +30,13 @@ var server = http.createServer(async function (request, response) {
   // handle different request urls using switch
   switch (true) {
     case request.url == "/" && request.method == "GET":
+      ++getRequestCounter;
       response.writeHead(200, { "Content-Type": "text/plain" }); // HTTP header
       response.end("Welcome to the Server");
       break;
 
     case request.url == "/images" && request.method == "GET":
+      ++getRequestCounter;
       if (inMemoryImagesData.length == 0) {
         // Respond for empty Image Array
         response.writeHead(200, { "Content-Type": "text/plain" }); // HTTP header
@@ -45,6 +51,7 @@ var server = http.createServer(async function (request, response) {
 
     // Handle JSON Payload
     case request.url == "/images" && request.method == "POST":
+      ++postRequestCounter;
       // Reference: https://nodejs.dev/learn/get-http-request-body-data-using-nodejs
       const buffers = [];
       for await (const chunk of request) {
@@ -56,6 +63,10 @@ var server = http.createServer(async function (request, response) {
       response.end("Data stored in memory");
       break;
   }
+
+  console.log(
+    `Processed Request Count--> Get:${getRequestCounter}, Post:${postRequestCounter}`
+  );
 });
 
 server.listen(PORT_ADDR, LOCALHOST, () => {
