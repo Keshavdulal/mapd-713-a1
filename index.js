@@ -15,17 +15,9 @@ const http = require("http");
 const PORT_ADDR = 8000;
 const LOCALHOST = "127.0.0.1";
 
-// let inMemoryImagesData = [];
-let inMemoryImagesData = [
-  {
-    imageId: 123,
-    name: "Candle",
-    url: "http://candle.cloud.com",
-    size: "500kb",
-  },
-];
+let inMemoryImagesData = [];
 
-var server = http.createServer(function (request, response) {
+var server = http.createServer(async function (request, response) {
   // handle different request urls using switch
   switch (true) {
     case request.url == "/" && request.method == "GET":
@@ -44,6 +36,19 @@ var server = http.createServer(function (request, response) {
         const responsePayload = { data: inMemoryImagesData };
         response.end(JSON.stringify(responsePayload));
       }
+      break;
+
+    // Handle JSON Payload
+    case request.url == "/images" && request.method == "POST":
+      // Reference: https://nodejs.dev/learn/get-http-request-body-data-using-nodejs
+      const buffers = [];
+      for await (const chunk of request) {
+        buffers.push(chunk);
+      }
+      const data = JSON.parse(Buffer.concat(buffers).toString());
+
+      inMemoryImagesData = [...inMemoryImagesData, data];
+      response.end("Data stored in memory");
       break;
   }
 });
