@@ -78,5 +78,6 @@ var server = http.createServer(async function (request, response) {
 server.listen(PORT_ADDR, LOCALHOST, () => {
   console.log(`\nServer is listening at ${LOCALHOST}:${PORT_ADDR}`);
   console.log(`\nEndpoints:`);
-  console.log(`${LOCALHOST}:${PORT_ADDR}/images method: GET, POST`);
+  console.log(`${LOCALHOST}:${PORT_ADDR}/ method: GET`);
+  console.log(`${LOCALHOST}:${PORT_ADDR}/images method: GET, POST, DELETE`);
 });
